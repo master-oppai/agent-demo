@@ -1,5 +1,7 @@
 import streamlit as st
 import random
+
+from agents.standard import StandardAgent
 from helpers.file_helper import parse_file
 from dotenv import load_dotenv
 
@@ -14,7 +16,7 @@ st.set_page_config(page_title="Plan Management", page_icon="📁", layout="cente
 
 # App title and description
 st.title("📁 Plan Management")
-st.markdown("Upload a file to process and analyze it.")
+st.markdown("Upload a file that you want to process and analyze it.")
 
 # File uploader
 uploaded_file = st.file_uploader(
@@ -24,7 +26,8 @@ uploaded_file = st.file_uploader(
 )
 
 agent_list: list[NIDSAgent] = [
-    NIDSAgent(name="Ichi Agent", description="Fraud detection for NIDS invoices", agent=IchiAgent)
+    NIDSAgent(name="Standard Agent", description="Agent that will check line by line", agent=StandardAgent),
+    NIDSAgent(name="Ichi Agent", description="Basic Fraud for NIDS invoices", agent=IchiAgent)
 ]
 
 selected_agents = []

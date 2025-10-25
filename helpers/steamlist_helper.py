@@ -1,6 +1,6 @@
 # python
 from pydantic import BaseModel, ConfigDict
-from agents.base_agent import BaseAgent
+from agents.models import BaseAgent
 
 class NIDSAgent(BaseModel):
     name: str
