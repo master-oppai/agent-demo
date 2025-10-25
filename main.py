@@ -1,5 +1,6 @@
-from agents.ichi import IchiAgent
 from dotenv import load_dotenv
+
+from agents.standard import StandardAgent
 
 # Load environment variables
 load_dotenv()
@@ -75,16 +76,9 @@ ACCOUNT NUMBER:  111111 11
 """
 
 if __name__ == "__main__":
-    ichi = IchiAgent(
+    agent = StandardAgent(
         model="gpt-4o-mini"
     )
-
-    print("Processing Fraud Invoice Data:")
-    fraud_result = ichi.process(fraud_data)
-    print(f"Is Valid: {fraud_result.is_valid}")
-    print(f"Reason: {fraud_result.reason}")
-
-    print("\nProcessing Real Invoice Data:")
-    real_result = ichi.process(real_data)
-    print(f"Is Valid: {real_result.is_valid}")
-    print(f"Reason: {real_result.reason}")
+    result = agent.process(fraud_data)
+    print(f"Is Valid: {result.is_valid}")
+    print(f"Reason: {result.reason}")

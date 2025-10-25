@@ -4,7 +4,7 @@ from langchain.agents import create_agent
 from langchain.agents.structured_output import ToolStrategy
 from langchain_openai import ChatOpenAI
 from langchain.tools import tool
-from .base_agent import ProcessResponse, BaseAgent
+from agents.models import ProcessResponse, BaseAgent
 
 system_prompt = """
 You're an expert at fraud detection for NIDS invoices. Given the content of an invoice, determine if it is potentially fraudulent. If the invoice appears legitimate, respond with is_valid set to true and provide a brief reason. If the invoice seems suspicious or fraudulent, respond with is_valid set to false and provide a detailed reason explaining the indicators of fraud.
