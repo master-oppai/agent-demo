@@ -1,9 +1,9 @@
-
 import streamlit as st
 import pandas as pd
 import json
 from io import BytesIO
 from PyPDF2 import PdfReader
+
 
 def parse_file(uploaded_file):
     filename = uploaded_file.name.lower()
