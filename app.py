@@ -110,8 +110,21 @@ if uploaded_file is not None:
                         agent_instance = meta.agent(model="gpt-4o-mini")
                         analysis = agent_instance.process(result["data"])
                         st.subheader(f"🤖 Analysis by {meta.name}")
-                        st.write(f"**Is Valid:** {analysis.is_valid}")
-                        st.write(f"**Reason:** {analysis.reason}")
+
+                        # Display validation status with color coding
+                        if analysis.is_valid:
+                            st.success(f"✅ **Status:** Valid Invoice")
+                        else:
+                            st.error(f"❌ **Status:** Fraudulent Invoice")
+
+                        # Display old pricing warning if applicable
+                        if hasattr(analysis, 'is_using_old_pricing') and analysis.is_using_old_pricing:
+                            st.warning("⚠️ **Old Pricing Detected:** This invoice may be using outdated NIDS pricing")
+
+                        # Display detailed reason
+                        st.write(f"**Analysis Details:**")
+                        st.info(analysis.reason)
+
                     except Exception as e:
                         st.error(f"Error running {meta.name}: {e}")
 

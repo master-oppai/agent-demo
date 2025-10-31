@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ndis-fraud-detection-api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - PORT=5000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      # Mount data directory for CSV files
+      - ./data:/app/data:ro
+      # Mount .env file for local development
+      - ./.env:/app/.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ndis-network
+
+networks:
+  ndis-network:
+    driver: bridge
+

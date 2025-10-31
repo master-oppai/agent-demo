@@ -6,4 +6,7 @@ pydantic
 pandas
 PyPDF2
 langchain-core
+flask
+flask-cors
+gunicorn
 
