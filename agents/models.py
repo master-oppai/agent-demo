@@ -16,6 +16,7 @@ class NIDSSource:
 class ProcessResponse(BaseModel):
     is_valid: bool
     reason: str
+    is_using_old_pricing: bool = False
 
 
 class BaseAgent(ABC):

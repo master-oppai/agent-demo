@@ -79,6 +79,7 @@ if __name__ == "__main__":
     agent = StandardAgent(
         model="gpt-4o-mini"
     )
-    result = agent.process(fraud_data)
+    result = agent.process(real_data)
     print(f"Is Valid: {result.is_valid}")
     print(f"Reason: {result.reason}")
+    print(f"Is Using Old Pricing: {result.is_using_old_pricing}")
