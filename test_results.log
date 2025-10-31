@@ -1,0 +1,335 @@
+
+====================================================================================================
+                              NDIS FRAUD DETECTION AGENT
+                            COMPREHENSIVE TESTING SUITE
+====================================================================================================
+[2025-10-31 23:42:22] [INFO] Starting test suite initialization
+[2025-10-31 23:42:22] [SUCCESS] ✓ API key found
+[2025-10-31 23:42:22] [INFO] Initializing StandardAgent with gpt-4o model...
+[2025-10-31 23:42:23] [SUCCESS] ✓ Agent initialized successfully
+[2025-10-31 23:42:23] [INFO] Running 10 test cases...
+
+
+====================================================================================================
+TEST 1/10: LEGITIMATE_INVOICE_1
+====================================================================================================
+[2025-10-31 23:42:23] [INFO] Starting test: LEGITIMATE_INVOICE_1
+📝 Description: Valid invoice with correct pricing for standard location
+🎯 Expected Result: ✓ VALID
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 26/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities -           4.0     $70.23    $280.92
+    📋 27/10/2025  01_020_0120_1_1    House Cleaning And Other Household Activities    3.5     $58.03    $203.11
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:42:23] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:42:37] [INFO] Agent analysis completed in 13.81s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✓ YES
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 13.81s
+  └─ Reason: All line items have valid codes and current pricing that matches the NIDS database. None of the items use old pricing.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:42:37] [SUCCESS] Test 1 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 2/10: LEGITIMATE_INVOICE_2
+====================================================================================================
+[2025-10-31 23:42:37] [INFO] Starting test: LEGITIMATE_INVOICE_2
+📝 Description: Valid invoice with remote location pricing
+🎯 Expected Result: ✓ VALID
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 25/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities -           6.0     $98.32    $589.92
+    📋 25/10/2025  01_019_0120_1_1    House or Yard Maintenance (Remote)               2.5     $79.77    $199.43
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:42:37] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:42:44] [INFO] Agent analysis completed in 7.54s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✓ YES
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 7.54s
+  └─ Reason: All item codes are valid according to NIDS. Pricing for all items matches the NIDS rates for remote locations. No old pricing is detected; all items use current pricing.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:42:44] [SUCCESS] Test 2 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 3/10: FRAUDULENT_INVALID_ITEM_CODE
+====================================================================================================
+[2025-10-31 23:42:44] [INFO] Starting test: FRAUDULENT_INVALID_ITEM_CODE
+📝 Description: Fraudulent invoice with non-existent NIDS item code
+🎯 Expected Result: ✗ FRAUDULENT
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 24/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities             3.0     $70.23    $210.69
+    📋 25/10/2025  01_020_0120_1_1    House Cleaning                                   2.0     $58.03    $116.06
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:42:44] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:42:53] [INFO] Agent analysis completed in 9.14s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✗ NO
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 9.14s
+  └─ Reason: The invoice contains an invalid item code, '99_999_9999_9_9', which does not exist in the NIDS database and may be fraudulent. Pricing for valid items '01_011_0107_1_1' and '01_020_0120_1_1' are correct and current. However, the presence of an invalid item code renders the entire invoice invalid.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:42:53] [SUCCESS] Test 3 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 4/10: FRAUDULENT_INCORRECT_PRICING
+====================================================================================================
+[2025-10-31 23:42:53] [INFO] Starting test: FRAUDULENT_INCORRECT_PRICING
+📝 Description: Fraudulent invoice with inflated pricing
+🎯 Expected Result: ✗ FRAUDULENT
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 26/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities             5.0     $95.50    $477.50
+    📋 27/10/2025  01_020_0120_1_1    House Cleaning And Other Household Activities    4.0     $75.00    $300.00
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:42:53] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:02] [INFO] Agent analysis completed in 8.81s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✗ NO
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 8.81s
+  └─ Reason: The invoice is marked as fraudulent due to incorrect pricing for the items listed. 
+
+1. Item 01_011_0107_1_1: The provided price of $95.50 does not match the NIDS standard price of $70.23, resulting in a discrepancy of $25.27. The item is using current pricing according to NIDS.
+
+2. Item 01_020_0120_1_1: The provided price of $75.00 does not match the NIDS standard price of $58.03, resulting in a discrepancy of $16.97. The item is using current pricing according to NIDS.
+
+These pricing discrepancies indicate that the invoice charges exceed authorized rates, leading to its classification as fraudulent.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:02] [SUCCESS] Test 4 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 5/10: FRAUDULENT_MIXED_INVALID_PRICING
+====================================================================================================
+[2025-10-31 23:43:02] [INFO] Starting test: FRAUDULENT_MIXED_INVALID_PRICING
+📝 Description: Mixed fraud - some correct items, some with wrong pricing
+🎯 Expected Result: ✗ FRAUDULENT
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 27/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities             3.0     $70.23    $210.69
+    📋 27/10/2025  01_019_0120_1_1    House or Yard Maintenance                        2.0     $45.00    $90.00
+    📋 28/10/2025  01_004_0107_1_1    Assistance with Personal Domestic Activities     4.0     $50.50    $202.00
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:02] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:09] [INFO] Agent analysis completed in 7.38s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✗ NO
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 7.38s
+  └─ Reason: The invoice is fraudulent due to the following pricing discrepancies: 
+1. Item code 01_019_0120_1_1: The price $45.00 does not match the NIDS standard location price of $56.98. There is an $11.98 discrepancy.
+2. Item code 01_004_0107_1_1: The price $50.50 does not match the NIDS standard location price of $59.06. There is an $8.56 discrepancy.
+All items are using current pricing and are not found in the inactive database.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:09] [SUCCESS] Test 5 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 6/10: LEGITIMATE_INVOICE_WEEKEND
+====================================================================================================
+[2025-10-31 23:43:09] [INFO] Starting test: LEGITIMATE_INVOICE_WEEKEND
+📝 Description: Valid invoice with weekend rates
+🎯 Expected Result: ✓ VALID
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 26/10/2025  01_013_0107_1_1    Assistance With Self-Care Activities -           6.0     $98.83    $592.98
+    📋 27/10/2025  01_014_0107_1_1    Assistance With Self-Care Activities -           5.0     $127.43   $637.15
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:09] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:25] [INFO] Agent analysis completed in 15.85s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✓ YES
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 15.85s
+  └─ Reason: Both line items (01_013_0107_1_1 and 01_014_0107_1_1) are valid according to the NIDS database. Prices are correct and matched with the NIDS standard pricing, and no old pricing was used for these items.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:25] [SUCCESS] Test 6 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 7/10: FRAUDULENT_OUTDATED_PRICING
+====================================================================================================
+[2025-10-31 23:43:25] [INFO] Starting test: FRAUDULENT_OUTDATED_PRICING
+📝 Description: Invoice using old/outdated pricing from inactive database
+🎯 Expected Result: ✗ FRAUDULENT
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 27/10/2025  05_122409171_0105_1_2  MWC - Accessory - Power-Assist Drive        1       $2,500.00 $2,500.00
+    📋 28/10/2025  01_011_0107_1_1        Assistance With Self-Care Activities         3.0     $70.23    $210.69
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:25] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:38] [INFO] Agent analysis completed in 12.89s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✗ NO
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 12.89s
+  └─ Reason: The item code 05_122409171_0105_1_2 does not exist in the NIDS database, indicating potential fraudulence for this item. The second item, 01_011_0107_1_1, is valid with correct pricing and no use of old pricing. The invoice is marked fraudulent due to the invalid item code found.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:38] [SUCCESS] Test 7 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 8/10: LEGITIMATE_INVOICE_MULTIPLE_SERVICES
+====================================================================================================
+[2025-10-31 23:43:38] [INFO] Starting test: LEGITIMATE_INVOICE_MULTIPLE_SERVICES
+📝 Description: Valid invoice with multiple different service types
+🎯 Expected Result: ✓ VALID
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 28/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities -           3.0     $70.23    $210.69
+    📋 28/10/2025  01_004_0107_1_1    Assistance with Personal Domestic Activities     2.5     $59.06    $147.65
+    📋 29/10/2025  01_020_0120_1_1    House Cleaning And Other Household Activities    3.0     $58.03    $174.09
+    📋 29/10/2025  01_019_0120_1_1    House or Yard Maintenance                        1.5     $56.98    $85.47
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:38] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:45] [INFO] Agent analysis completed in 6.93s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✓ YES
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 6.93s
+  └─ Reason: All item codes (01_011_0107_1_1, 01_004_0107_1_1, 01_020_0120_1_1, 01_019_0120_1_1) are valid according to NIDS database, and prices ($70.23, $59.06, $58.03, $56.98 respectively) match the current NIDS pricing for a standard location. All items are using current pricing.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:45] [SUCCESS] Test 8 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 9/10: FRAUDULENT_REMOTE_PRICING_MISMATCH
+====================================================================================================
+[2025-10-31 23:43:45] [INFO] Starting test: FRAUDULENT_REMOTE_PRICING_MISMATCH
+📝 Description: Claims remote pricing but uses incorrect rates
+🎯 Expected Result: ✗ FRAUDULENT
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 26/10/2025  01_011_0107_1_1    Assistance With Self-Care Activities -           4.0     $85.00    $340.00
+    📋 27/10/2025  01_020_0120_1_1    House Cleaning (Remote)                          3.0     $70.00    $210.00
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:45] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:43:52] [INFO] Agent analysis completed in 7.11s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✗ NO
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 7.11s
+  └─ Reason: The invoice contains discrepancies in pricing for both line items, despite the codes being valid. 
+
+1. The item 'Assistance With Self-Care Activities' (Item Code: 01_011_0107_1_1) for remote location is billed at $85.00 per hour, but according to NIDS, it should be $98.32 per hour. There's a discrepancy of $13.32 per hour.
+
+2. The item 'House Cleaning' (Item Code: 01_020_0120_1_1) for remote location is billed at $70.00 per hour, but according to NIDS, it should be $81.24 per hour. There's a discrepancy of $11.24 per hour.
+
+Both items are using current, not old, pricing guidelines as confirmed by NIDS.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:43:52] [SUCCESS] Test 9 ✓ PASSED
+====================================================================================================
+
+====================================================================================================
+TEST 10/10: LEGITIMATE_INVOICE_EVENING_SHIFT
+====================================================================================================
+[2025-10-31 23:43:52] [INFO] Starting test: LEGITIMATE_INVOICE_EVENING_SHIFT
+📝 Description: Valid invoice with evening rates
+🎯 Expected Result: ✓ VALID
+----------------------------------------------------------------------------------------------------
+Invoice Items:
+    📋 28/10/2025  01_015_0107_1_1    Assistance With Self-Care Activities -           4.0     $77.38    $309.52
+    📋 29/10/2025  01_002_0107_1_1    Assistance With Self-Care Activities -           5.0     $78.81    $394.05
+----------------------------------------------------------------------------------------------------
+[2025-10-31 23:43:52] [INFO] Sending invoice to agent for analysis...
+[2025-10-31 23:44:03] [INFO] Agent analysis completed in 10.67s
+
+                                      🤖 AGENT ANALYSIS RESULTS                                      
+----------------------------------------------------------------------------------------------------
+  ├─ Is Valid: ✓ YES
+  ├─ Using Old Pricing: ✓ NO
+  ├─ Analysis Time: 10.67s
+  └─ Reason: All items in the invoice have been verified. Both item codes 01_015_0107_1_1 and 01_002_0107_1_1 exist in the NIDS database. Additionally, the prices for these items ($77.38 and $78.81, respectively) match the NIDS pricing for a standard location. Furthermore, there is no indication of outdated pricing as both items are only found in the active database.
+----------------------------------------------------------------------------------------------------
+
+                                       ✓ TEST RESULT: PASSED                                        
+                              (Agent correctly identified the invoice)                              
+[2025-10-31 23:44:03] [SUCCESS] Test 10 ✓ PASSED
+====================================================================================================
+
+
+====================================================================================================
+                                            TEST SUMMARY                                            
+====================================================================================================
+[2025-10-31 23:44:03] [INFO] Test suite completed
+
+  Total Tests Run: 10
+  ✓ Passed: 10 (100.0%)
+  ✗ Failed: 0 (0.0%)
+  ⏱️  Total Duration: 100.65s
+  ⌀ Average per Test: 10.07s
+====================================================================================================
+
+====================================================================================================
+                                          DETAILED RESULTS                                          
+====================================================================================================
+Test Name                                Expected        Actual          Result     Time      
+----------------------------------------------------------------------------------------------------
+LEGITIMATE_INVOICE_1                     VALID           VALID           ✓ PASS     13.81s    
+LEGITIMATE_INVOICE_2                     VALID           VALID           ✓ PASS     7.54s     
+FRAUDULENT_INVALID_ITEM_CODE             FRAUDULENT      FRAUDULENT      ✓ PASS     9.14s     
+FRAUDULENT_INCORRECT_PRICING             FRAUDULENT      FRAUDULENT      ✓ PASS     8.81s     
+FRAUDULENT_MIXED_INVALID_PRICING         FRAUDULENT      FRAUDULENT      ✓ PASS     7.38s     
+LEGITIMATE_INVOICE_WEEKEND               VALID           VALID           ✓ PASS     15.85s    
+FRAUDULENT_OUTDATED_PRICING              FRAUDULENT      FRAUDULENT      ✓ PASS     12.89s    
+LEGITIMATE_INVOICE_MULTIPLE_SERVICES     VALID           VALID           ✓ PASS     6.93s     
+FRAUDULENT_REMOTE_PRICING_MISMATCH       FRAUDULENT      FRAUDULENT      ✓ PASS     7.11s     
+LEGITIMATE_INVOICE_EVENING_SHIFT         VALID           VALID           ✓ PASS     10.67s    
+====================================================================================================
+
+====================================================================================================
+                                       🎉 ALL TESTS PASSED! 🎉                                        
+====================================================================================================
+
+[2025-10-31 23:44:03] [SUCCESS] Test suite finished: 10/10 passed

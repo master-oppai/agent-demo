@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """Test script for NIDS pricing validation tools."""
+import sys
+from pathlib import Path
+
+# Add parent directory to path so we can import agents module
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agents.tools import check_nids_item_exists, check_nids_item_pricing, check_if_using_old_pricing
 
